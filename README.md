@@ -50,3 +50,34 @@ section .data
 _start:
     ; commands
 ```
+
+### Functions 
+Functions allow us to reuse code where when a function is called the execution jumps to the code for the function and then after the function runs to completion it jumps back to the position where the function was called.
+The **call** operation is used to call functions, it does the following:
+1. Stores the location of the next instruction to be called to the stack
+1. Performs a jump to the memory location of the function
+
+Example function call:
+
+The **ret** operation pops a value from the stack and jumps to said location. It *returns* us to whatever value was in the stack. It is equivalent to 
+```asm
+pop eax
+jmp eax
+```
+
+What if your function uses the stack? To preserve the state of the stack so that we can use the ret operation we can do the following:
+```asm
+func:
+    mov ebp, esp
+    ; change stack
+    mov esp, ebp
+    ret
+```
+What this does is that it uses a special register called the **base pointer register(ebp)** to store what was on the top of the stack i.e the next function to call. *esp points to the value at the top of the stack*
+
+So how do we pass arguements to functions and use their return values? 
+
+### Function Arguements And Return Values
+Functions get their arguements from the stack. So we access the values from their
+Example Code:
+
