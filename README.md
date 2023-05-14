@@ -12,7 +12,7 @@ _start:
     ; our code
 ```
 ### Making a system call
-To switch control from our program to the interrupt handler i.e to create an interrupt we make an interrupt call with the **int** command. The interrupt command takes as an operand a hex number that specifies which interrupt handler to choose. One of the interrupt handlers is the **system call interrupt** handler (0x80). The system call interrupt handler has a list of system calls it can make e.g sys_exit or sys_write. In order to tell it what call to make we place a value in the **eax** register. A **value of 1 represents the sys_exit** command while a **value of 4 represents sys_write**. Different system calls take arguements from a different number of registers. For example the sys_write call takes the **message length arguement from the edx register, message to write from ecx register and file descriptor from ebx register**.
+To switch control from our program to the interrupt handler i.e to create an interrupt we make an interrupt call with the **int** command. The interrupt command takes as an operand a hex number that specifies which interrupt handler to choose. One of the interrupt handlers is the **system call interrupt** handler (0x80). The system call interrupt handler has a list of system calls it can make e.g sys_exit or sys_write. In order to tell it what call to make we place a value in the **eax** register. A **value of 1 represents the sys_exit** command while a **value of 4 represents sys_write**. Different system calls take arguements from a different number of registers. For example the sys_write call takes the **message length arguement from the edx register, pointer to the message to write from ecx register and file descriptor from ebx register**.
 ```assembly
 mov eax, 4
 mov edx, 1
@@ -99,6 +99,9 @@ loop:
     mov eax, 1
     int 0x80 ; end loop
 ```
+There is also the dedicated **loop** instruction that performs the same operations above. It assumes that the value of the control variable is at the ecx register and that the loop will end when the value in the ecx register is 0. 
+
+An example using the loop command
 
 
 
