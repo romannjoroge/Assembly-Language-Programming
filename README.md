@@ -83,6 +83,7 @@ Using the operations above we can make a comparison using the **cmp** operation 
 
 An example using conditional branching:
 https://github.com/romannjoroge/Assembly-Language-Programming/blob/ce7b923f3b61f18962c388bf29376cf2db7523ff/assignment2.asm#L1-L82
+In the example a number from 0 to 9 is taken from the user. Depending on the value of the number something different is printed.
 
 #### Looping
 Looping has similar principles. We use a register to store the number of times the loop has run, or the value we will use to determine when to stop looping. On each iteration of the loop we decrement the value in the register. At the end of each iteration we check if the ending condition is made. If it is not we make a jump back to the beginning of the loop otherwise we exit the loop
