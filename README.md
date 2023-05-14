@@ -37,7 +37,7 @@ You then run the executable
 ./executable
 ```
 ### Instructions 
-The syntax for instructions is *operation [operand1, operand2, ...]* e.g moc ebx, 1
+The syntax for instructions is *operation [operand1, operand2, ...]* e.g mov ebx, 1
 ### Variables
 To add variables to our assembly program we add a section .data to our file where we define our variables and initialize them i.e if we want a varaible called msg that holds the string "Hello World\n" we do
 ```assembly
@@ -46,10 +46,57 @@ section .data
 ```
 When we do this we put our code in a section .text i.e
 ```assembly
-section .data
+section .text
+    global _start
 _start:
     ; commands
 ```
+
+### Program Control Flow
+This section deals with conditions and loops.
+To understand this we need to look at how the machine executes instructions. As the machine executes an instruction it updates the value of the *instruction pointer (EIP)*. The EIP holds the location of the current instruction been executed and it's value can only be changed using the **jmp** operation. 
+Program control flow leverages the **jmp** operation.
+
+To tell jump what line of code to go to we pass it a **label**. A label is created by writting some text followed by a colon. An example
+```assembly
+section .text
+global _start
+_start: 
+    mov eax, 1
+    mov ebx, 42
+    jmp skip
+    mov ebx, 13 ; this command is skipped
+skip:
+    int 0x80
+```
+
+#### Conditional Branching
+The **jmp** operation always jumps no matter what. We would want a way to jump to a label **based on whether a condition is true or not**. This can be achieved using the following operations:
+1. jl - jump if less
+1. je - jump if equal
+1. jne - jump if not equal
+1. jg - jump if greater
+1. jge - jump if greater or equal
+1. jle - jump if less or equal
+
+Using the operations above we can make a comparison using the **cmp** operation and depending on the result of the comparison jump to a different part of the code. In effect this has allowed us to implement **conditional branching** in assembly.
+
+#### Looping
+Looping has similar principles. We use a register to store the number of times the loop has run, or the value we will use to determine when to stop looping. On each iteration of the loop we decrement the value in the register. At the end of each iteration we check if the ending condition is made. If it is not we make a jump back to the beginning of the loop otherwise we exit the loop
+```assembly
+global _start
+_start:
+    mov ecx, 4 ; storing condition variable in ecx
+loop:
+    ; do something in each iteration
+    dec ecx ; change the condition variable
+    cmp ecx, 0 ; check if ending condition is reached
+    jg loop ; loop again if condition not met
+    mov eax, 1
+    int 0x80 ; end loop
+```
+
+
 
 ### Functions 
 Functions allow us to reuse code where when a function is called the execution jumps to the code for the function and then after the function runs to completion it jumps back to the position where the function was called.
