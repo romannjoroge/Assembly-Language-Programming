@@ -198,9 +198,12 @@ jmp eax
 What if your function uses the stack? To preserve the state of the stack so that we can use the ret operation we can do the following:
 ```asm
 func:
+    ; incase another function called this one and is also using ebp to keep track of where to go we can save ebp
+    push ebp
     mov ebp, esp
     ; change stack
     mov esp, ebp
+    pop ebp
     ret
 ```
 What this does is that it uses a special register called the **base pointer register(ebp)** to store what was on the top of the stack i.e the next function to call. *esp points to the value at the top of the stack*
@@ -208,8 +211,41 @@ What this does is that it uses a special register called the **base pointer regi
 So how do we pass arguements to functions and use their return values? 
 
 ### Function Arguements And Return Values
-Functions get their arguements from the stack. So we access the values from their
+In x86 functions get their arguements from the stack. So if you want to pass arguements to a function we push them to the stack. And the called function gets them from the stack. The return values of the function are stored in registers or memory locations.
 Example Code:
+
+
+When we want to run code from C in assembly we use the gcc linker instead of the ld linker. The command to use the gcc linker is: 
+```bash
+gcc -m32 object_file.o -o executable
+```
+
+C normally defines the _start label for you so when using C code in assembly there is no need to redefine a _start label. On the other hand C expects a main function or label in your code so a main label is defined. For the functions that we want to use from C we'll have to tell nasm that they have been defined externally. The arguements for the functions are pushed to the stack, the arguements are pushed in reverse order
+```assembly
+global main
+extern printf
+
+section .data
+    msg "Testing %i...", 0xa, 0x0 ; 0x0 indicates the end of the string
+
+main:
+    ; prolog of function
+    push ebp
+    mov ebp, esp
+
+    ; push arguements for printf
+    push 123
+    push msg
+
+    call printf
+
+    ; return value of the function
+    mov eax, 0
+
+    mov esp, ebp
+    pop ebp
+    ret
+```
 
 ### Common operations
 SUB X, Y - subtracts X from Y and stores the result in X
