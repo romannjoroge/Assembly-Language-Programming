@@ -247,5 +247,16 @@ main:
     ret
 ```
 
+### Macros
+This is another way to reuse code. They are similar to functions.
+The syntax for macro definition
+```assembly
+%macro<macro name> <number_of_parameters>
+<macro-body>
+%endmacro
+```
+An example of a macro that prints items to the screen:
+
+
 ### Common operations
 SUB X, Y - subtracts X from Y and stores the result in X
