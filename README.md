@@ -142,6 +142,44 @@ looptrial:
 ```
 The loop replaces what would have been dec eax, cmp eax, 0, jg looptrial.
 
+### Memory Access and stack operations
+Let's assume we have the following data section
+```assembly
+section .data
+    addr db "yellow"
+```
+**addr is a pointer that points to a location that contains yellow**
+When we want to move something to the address pointed at by addr we do *mov [addr], value*. We can add an offset to the memory location i.e *mov [addr + 5], value*
+**db** means one byte
+**dw** means a word or 2 bytes
+**dd** means 4 bytes
+
+The stack is a data structure that is LIFO. It is an array that has stack pointer(ESP) that **points to the top of the stack**. 
+When we push a value to the stack e.g *push 1234* the following happens:
+1. The stack pointer is decremented by 4
+1. The value is placed in that memory location
+
+```assembly
+global _start:
+    push 1234
+    ; this is the same as
+    sub esp, 4
+    mov [esp], dword 1234
+```
+
+When we pop a value from the stack the following happens:
+1. The value at the top of the stack will be moved at the location
+1. The stack pointer is incremented by 4
+
+```assembly
+global _start
+_start:
+    pop eax
+    ; this is the same as
+    mov eax, dword [esp]
+    add esp, 4
+```
+
 
 ### Functions 
 Functions allow us to reuse code where when a function is called the execution jumps to the code for the function and then after the function runs to completion it jumps back to the position where the function was called.
