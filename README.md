@@ -23,6 +23,22 @@ int 0x80 ; making sys_write call
 mov eax, 1 
 int 0x80 ; making a sys_exit call
 ```
+
+Example code for printing a number:
+```assembly
+    mov [msg2], byte 4
+    add [msg2], byte '0'
+    mov edx, 1
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, msg2
+    int 0x80
+
+    mov eax, 1
+    mov ebx, 0  
+    int 0x80
+```
+
 ### Running the program
 To tell nasm to assemble the assembly and create an output(o) file that is in a format(f) that can be executed in linux(elf) that is 32 bit (elf32) we run the command
 ```bash
@@ -99,10 +115,32 @@ loop:
     mov eax, 1
     int 0x80 ; end loop
 ```
-There is also the dedicated **loop** instruction that performs the same operations above. It assumes that the value of the control variable is at the ecx register and that the loop will end when the value in the ecx register is 0. 
+This process can be made easier using the **loop** operator that decrements ecx, compares it to zero and if greater than 0 repeats the loop for you. The loop command assumes that the control value is stored in the ecx register.
 
-An example using the loop command
+```assembly
+section .text
+global _start
+_start:
+    mov ecx, 2
+    jmp looptrial
 
+looptrial:
+    mov esi, ecx
+
+    mov eax, 4
+    mov ecx, msg2
+    mov ebx, 1
+    mov edx, len2
+    int 0x80
+
+    mov ecx, esi
+    loop looptrial
+
+    mov eax, 1
+    mov ebx, 0
+    int 0x80 
+```
+The loop replaces what would have been dec eax, cmp eax, 0, jg looptrial.
 
 
 ### Functions 
@@ -135,3 +173,5 @@ So how do we pass arguements to functions and use their return values?
 Functions get their arguements from the stack. So we access the values from their
 Example Code:
 
+### Common operations
+SUB X, Y - subtracts X from Y and stores the result in X
