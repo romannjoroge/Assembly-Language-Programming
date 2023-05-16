@@ -5,7 +5,7 @@ _start:
     mov bl, 2
     div bl
 
-    push al
+    push ax
     add [esp], byte '0'
 
     mov eax, 4
