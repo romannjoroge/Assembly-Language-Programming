@@ -150,9 +150,10 @@ section .data
 ```
 **addr is a pointer that points to a location that contains yellow**
 When we want to move something to the address pointed at by addr we do *mov [addr], value*. We can add an offset to the memory location i.e *mov [addr + 5], value*
-**db** means one byte
-**dw** means a word or 2 bytes
-**dd** means 4 bytes
+1.**db** means one byte
+1.**dw** means a word or 2 bytes
+1.**dd** means 4 bytes
+1.**dq** means 8 bytes
 
 The stack is a data structure that is LIFO. It is an array that has stack pointer(ESP) that **points to the top of the stack**. 
 When we push a value to the stack e.g *push 1234* the following happens:
@@ -259,4 +260,6 @@ An example of a macro that prints items to the screen:
 
 
 ### Common operations
-SUB X, Y - subtracts X from Y and stores the result in X
+**SUB X, Y** - subtracts X from Y and stores the result in X
+**MUL X** - multiplies unsigned numbers, the multiplicant must be either in the accumulator, AL, DX or EAX. The result of multiplying 2 one byte numbers is stored in the AX, 2 two byte numbers is stored in DX:AX, 2 double words are stored in EDX:EAX
+**IMUL X, Y, Z** - the multiplicand is in the AX, EAX, AL. If one operand is given the result is stored in a similar way to MUL, otherwise result is truncated and stored in first operand 
